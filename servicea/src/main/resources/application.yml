@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: serviceA
+  cloud:
+    consul:
+      discovery:
+        prefer-ip-address: true
+        health-check-interval: 10s
+        hostname: ${spring.application.name}
+        service-name: ${spring.application.name}
+        enabled: true
+        instance-id: ${spring.application.name}:${server.port}
+        healthCheckUrl: http://localhost:8082/audio/v1/health
+server:
+  port: 8082
+  servlet:
+    context-path: /audio
+logging:
+  level:
+    com:
+      iqiyi: INFO

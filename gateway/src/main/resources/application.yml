@@ -1,0 +1,28 @@
+server:
+  port: 80
+spring:
+  application:
+    name: gateway
+  cloud:
+    consul:
+      discovery:
+        prefer-ip-address: true
+        health-check-interval: 10s
+        hostname: ${spring.cloud.client.ip-address}
+        service-name: ${spring.application.name}
+        enabled: true
+        instance-id: ${spring.application.name}:${server.port}
+zuul:
+  ignored-patterns: /actuator/**
+  # port 从8081开始
+  routes:
+    serviceA:
+      path: /audio/**
+      serviceId: serviceA
+#如果此配置不设置为false，则zuul处理路由时，会将path的前缀忽略。
+#多个服务时，去掉前缀，无法区分转发的请求。路径中会补充serviceId作为转发前缀。
+      strip-prefix: false
+    serviceB:
+      path: /audio2/**
+      serviceId: serviceB
+      strip-prefix: false
